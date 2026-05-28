@@ -1,62 +1,52 @@
-# V2 Labs - Django REST API Backend
+# V2 Labs Backend
 
-This is the backend API engine for **V2 Labs**, handling client project leads, contact submissions, and admin data. It is powered by **Django 4.2** and **Django REST Framework (DRF)**.
+Django + Django REST Framework backend for V2 Labs lead capture and notification workflows.
 
-## Core Setup Details
+## Local setup
 
-- **App Name**: `api`
-- **Models**:
-  - `ProjectLead`: Stores client inquiries, names, emails, phones, selected service types, estimated budgets, and project descriptions.
-- **REST Endpoints**:
-  - `POST /api/contact/`: Receives project request lead from frontend form. Saves to database and returns a thank you response.
-  - `GET /api/contact/`: Health check returns active API message and service options.
-- **Security Features**:
-  - CORS Headers configured to resolve origin permissions in container networks.
+1. Create `.env` from [`.env.example`](C:/Users/User/Desktop/v2labs/v2labs%20backend/v2-labs/.env.example:1).
+2. Install dependencies:
 
----
+```bash
+pip install -r requirements.txt
+```
 
-## 🛠️ Getting Started Locally
+3. Run migrations:
 
-### 1. Initialize Virtual Environment & Install Requirements
-
-1. Navigate to this directory (`v2-backend`).
-2. Activate the pre-created virtual environment:
-   - **Windows PowerShell**:
-     ```powershell
-     .\.venv\Scripts\Activate.ps1
-     ```
-   - **Windows Command Prompt (CMD)**:
-     ```cmd
-     .\.venv\Scripts\activate.bat
-     ```
-3. Install requirements (optional if already completed):
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### 2. Database Migrations
-
-Apply standard SQLite migrations to create `db.sqlite3` file and tables:
 ```bash
 python manage.py migrate
 ```
 
-### 3. Start Development Server
+4. Start the server:
 
 ```bash
 python manage.py runserver
 ```
-- Access the API homepage at: [http://localhost:8000/api/contact/](http://localhost:8000/api/contact/)
 
----
+## Deployment on Render
 
-## 🐋 Docker Container Commands
+- Python version is pinned in [runtime.txt](C:/Users/User/Desktop/v2labs/v2labs%20backend/v2-labs/runtime.txt:1)
+- Render blueprint config is in [render.yaml](C:/Users/User/Desktop/v2labs/v2labs%20backend/v2-labs/render.yaml:1)
+- Build script is in [build.sh](C:/Users/User/Desktop/v2labs/v2labs%20backend/v2-labs/build.sh:1)
 
-- **Build Docker Image**:
-  ```bash
-  docker build -t v2labs-backend .
-  ```
-- **Run Container**:
-  ```bash
-  docker run -p 8000:8000 v2labs-backend
-  ```
+### Required environment variables
+
+- `DJANGO_ENV=production`
+- `DJANGO_SECRET_KEY`
+- `DJANGO_ALLOWED_HOSTS`
+- `DJANGO_CORS_ALLOWED_ORIGINS`
+- `DJANGO_CSRF_TRUSTED_ORIGINS`
+- `DATABASE_URL`
+- `EMAIL_HOST_USER`
+- `EMAIL_HOST_PASSWORD`
+- `LEAD_NOTIFICATION_RECIPIENTS`
+- `V2_LABS_FRONTEND_URL`
+
+## Lead notifications
+
+Lead submissions from `/api/contact/` trigger:
+
+- lead persistence
+- IP / user-agent / source-page capture
+- premium HTML email notification
+- plain-text fallback email

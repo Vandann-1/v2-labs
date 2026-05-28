@@ -1,0 +1,111 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}New Lead Received | {{ company_name }}{% endblock %}
+
+{% block content %}
+  <div class="hero">
+    <span class="badge">New Lead Received</span>
+    <h1 class="headline">A new project enquiry just landed for {{ company_name }}.</h1>
+    <p class="subcopy">
+      Review the lead details below, reply quickly, and convert the conversation while intent is fresh.
+    </p>
+  </div>
+
+  <div class="card">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <td style="padding: 0 0 18px 0;">
+          <div class="panel-dark">
+            <p style="margin: 0 0 8px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.58); font-weight: 700;">
+              Lead Priority
+            </p>
+            <p style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 700;">{{ priority.label }}</p>
+            <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.78);">
+              {{ priority.reason }}
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <p class="section-title">Quick Actions</p>
+    <div style="padding-bottom: 8px;">
+      <a href="{{ reply_email }}" class="button button-primary">Reply to Lead</a>
+      {% if call_link %}
+        <a href="{{ call_link }}" class="button button-secondary">Call Lead</a>
+      {% endif %}
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="section-title">Lead Snapshot</p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" class="grid">
+      <tr>
+        <td style="padding: 0 10px 16px 0; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Full Name</p>
+            <p class="value">{{ lead.name }}</p>
+          </div>
+        </td>
+        <td style="padding: 0 0 16px 10px; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Email</p>
+            <p class="value">{{ lead.email }}</p>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 0 10px 16px 0; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Phone Number</p>
+            <p class="value">{{ lead.phone|default:"Not provided" }}</p>
+          </div>
+        </td>
+        <td style="padding: 0 0 16px 10px; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Service Interested In</p>
+            <p class="value">{{ lead.get_service_display }}</p>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 0 10px 16px 0; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Budget</p>
+            <p class="value">{{ lead.budget|default:"Not specified" }}</p>
+          </div>
+        </td>
+        <td style="padding: 0 0 16px 10px; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Submitted At</p>
+            <p class="value">{{ submitted_at|date:"M d, Y" }} at {{ submitted_at|time:"h:i A" }} {{ submitted_timezone }}</p>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 0 10px 16px 0; vertical-align: top;">
+          <div class="panel">
+            <p class="label">IP Address</p>
+            <p class="value">{{ lead.ip_address|default:"Unavailable" }}</p>
+          </div>
+        </td>
+        <td style="padding: 0 0 16px 10px; vertical-align: top;">
+          <div class="panel">
+            <p class="label">Source Page</p>
+            <p class="value">{{ source_page|default:"Unavailable" }}</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div class="panel" style="margin-top: 8px;">
+      <p class="label">Message</p>
+      <p class="value" style="white-space: pre-line;">{{ lead.message }}</p>
+    </div>
+
+    <div class="panel" style="margin-top: 16px;">
+      <p class="label">User Agent / Device Info</p>
+      <p class="value">{{ lead.user_agent|default:"Unavailable" }}</p>
+    </div>
+  </div>
+{% endblock %}

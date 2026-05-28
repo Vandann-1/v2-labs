@@ -1,0 +1,20 @@
+New Lead Received - {{ company_name }}
+
+Priority: {{ priority.label }}
+Reason: {{ priority.reason }}
+
+Full Name: {{ lead.name }}
+Email: {{ lead.email }}
+Phone Number: {{ lead.phone|default:"Not provided" }}
+Service Interested In: {{ lead.get_service_display }}
+Budget: {{ lead.budget|default:"Not specified" }}
+Message:
+{{ lead.message }}
+
+Submitted At: {{ submitted_at|date:"M d, Y" }} at {{ submitted_at|time:"h:i A" }} {{ submitted_timezone }}
+IP Address: {{ lead.ip_address|default:"Unavailable" }}
+Source Page: {{ source_page|default:"Unavailable" }}
+User Agent / Device Info: {{ lead.user_agent|default:"Unavailable" }}
+
+Reply to Lead: {{ reply_email }}
+{% if call_link %}Call Lead: {{ call_link }}{% endif %}
