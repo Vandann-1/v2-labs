@@ -1,7 +1,7 @@
 import os
 
 from .settings_base import *  # noqa: F401,F403
-from .settings_base import env_bool, env_list
+from .settings_base import USING_EXTERNAL_DATABASE, env_bool, env_list
 
 
 DEBUG = False
@@ -21,8 +21,10 @@ X_FRAME_OPTIONS = "DENY"
 SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", "31536000"))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", True)
 SECURE_HSTS_PRELOAD = env_bool("DJANGO_SECURE_HSTS_PRELOAD", True)
-DATABASES["default"]["CONN_MAX_AGE"] = 600
-DATABASES["default"]["OPTIONS"] = {
-    **DATABASES["default"].get("OPTIONS", {}),
-    "sslmode": os.getenv("DATABASE_SSLMODE", "require"),
-}
+
+if USING_EXTERNAL_DATABASE:
+    DATABASES["default"]["CONN_MAX_AGE"] = 600
+    DATABASES["default"]["OPTIONS"] = {
+        **DATABASES["default"].get("OPTIONS", {}),
+        "sslmode": os.getenv("DATABASE_SSLMODE", "require"),
+    }

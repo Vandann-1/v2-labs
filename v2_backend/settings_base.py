@@ -79,6 +79,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+USING_EXTERNAL_DATABASE = bool(DATABASE_URL)
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
